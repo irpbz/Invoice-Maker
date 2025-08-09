@@ -73,6 +73,9 @@
 <p><strong>Using <a href="https://www.npmjs.com/">npm</a>:</strong></p>
 <pre><code class="language-sh">npm test
 </code></pre>
+<p>For Login Use This Username and Password</p>
+<p>admin</p>
+<p>admin</p>
 <hr>
 <div align="left" class=""><a href="#top">⬆ Return</a></div>
 <hr></div>
