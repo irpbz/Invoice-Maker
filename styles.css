@@ -1,0 +1,596 @@
+body {
+    font-family: 'Shabnam', sans-serif;
+    background-color: #f5f7fa;
+}
+
+@font-face {
+    font-family: "Shabnam";
+    src: url("https://cdn.fontcdn.ir/Fonts/Shabnam/a074a415cfe0e4f57e2ede996a73d0e509c0ea194c9678c7b87c65fb977907e7.woff2") format("woff2");
+    font-weight: 100;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Shabnam";
+    src: url("https://cdn.fontcdn.ir/Fonts/Shabnam/87cf5dde711a284c1e25dd414d51a571b7c9aedd91b2b96f9d679869f5d65162.woff2") format("woff2");
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Shabnam";
+    src: url("https://cdn.fontcdn.ir/Fonts/Shabnam/540d3f4e172bd6b5c70dd06bce57e055ce59270e95ea642b414fe0709faaa085.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Shabnam";
+    src: url("https://cdn.fontcdn.ir/Fonts/Shabnam/fd5931f57e84baad81cc7243cfc1c83e5ac7f5dd17818d917765063544a54441.woff2") format("woff2");
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Shabnam";
+    src: url("https://cdn.fontcdn.ir/Fonts/Shabnam/1ff187f5320ec4527ebb6a71831b88289a6cb18ca33ac34476b96960f0af7282.woff2") format("woff2");
+    font-weight: 700;
+    font-style: normal;
+}
+
+.summary-box, .info-box {
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 16px;
+    background-color: #ffffff;
+    margin-top: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.summary-box:hover, .info-box:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.info-box h3, .summary-box h3 {
+    background-color: #3b82f6;
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    font-size: 1.125rem;
+    font-weight: 600;
+}
+
+.grid-2-col {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+}
+
+@media (min-width: 640px) {
+    .grid-2-col {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.summary-item {
+    border: 1px solid #e5e7eb;
+    background-color: #f8fafc;
+    padding: 10px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.summary-item:hover {
+    background-color: #f1f5f9;
+}
+
+.grand-total {
+    background-color: #e2e8f0;
+    padding: 16px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1.125rem;
+}
+
+#invoicePreview {
+    position: relative;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+#invoicePreview:hover {
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+.tab-button {
+    padding: 8px 16px;
+    margin-left: 6px;
+    border-radius: 10px 10px 0 0;
+    background-color: #e5e7eb;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.tab-button:hover {
+    background-color: #d1d5db;
+}
+
+.tab-button.active {
+    background-color: #3b82f6;
+    color: white;
+    font-weight: 600;
+}
+
+.tab-content {
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.dropdown {
+    position: relative;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    max-height: 250px;
+    overflow-y: auto;
+    width: 100%;
+    z-index: 10;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-content div {
+    padding: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.dropdown-content div:hover {
+    background-color: #f3f4f6;
+}
+
+.dropdown-content.show {
+    display: block;
+}
+
+#itemImagePreview img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+@media (min-width: 640px) {
+    #itemImagePreview img {
+        width: 150px;
+        height: 150px;
+    }
+}
+
+#itemImagePreview img:hover {
+    transform: scale(1.03);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.15);
+}
+
+input, select, textarea {
+    transition: all 0.3s ease;
+    border: 1px solid #d1d5db;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+button {
+    transition: all 0.3s ease;
+    transform: translateY(0);
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+.login-container {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    border-radius: 15px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.main-container {
+    background: linear-gradient(135deg, #f5f7fa 0%, #e0e7ff 100%);
+    border-radius: 15px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.table-row:hover {
+    background-color: #f8fafc;
+}
+
+.logo-container {
+    transition: all 0.3s ease;
+}
+
+.logo-container:hover {
+    transform: scale(1.05);
+}
+
+@media (max-width: 640px) {
+    .main-container {
+        padding: 1rem;
+    }
+
+    .tab-button {
+        flex: 1 1 100%;
+        margin-bottom: 0.5rem;
+        border-radius: 0.5rem;
+    }
+
+    table {
+        font-size: 0.875rem;
+    }
+
+    th, td {
+        padding: 0.5rem;
+    }
+
+    button {
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+    }
+}
+
+body {
+    font-family: 'Shabnam', sans-serif;
+    background-color: #f5f7fa;
+}
+
+@font-face {
+    font-family: "Shabnam";
+    src: url("https://cdn.fontcdn.ir/Fonts/Shabnam/a074a415cfe0e4f57e2ede996a73d0e509c0ea194c9678c7b87c65fb977907e7.woff2") format("woff2");
+    font-weight: 100;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Shabnam";
+    src: url("https://cdn.fontcdn.ir/Fonts/Shabnam/87cf5dde711a284c1e25dd414d51a571b7c9aedd91b2b96f9d679869f5d65162.woff2") format("woff2");
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Shabnam";
+    src: url("https://cdn.fontcdn.ir/Fonts/Shabnam/540d3f4e172bd6b5c70dd06bce57e055ce59270e95ea642b414fe0709faaa085.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Shabnam";
+    src: url("https://cdn.fontcdn.ir/Fonts/Shabnam/fd5931f57e84baad81cc7243cfc1c83e5ac7f5dd17818d917765063544a54441.woff2") format("woff2");
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Shabnam";
+    src: url("https://cdn.fontcdn.ir/Fonts/Shabnam/1ff187f5320ec4527ebb6a71831b88289a6cb18ca33ac34476b96960f0af7282.woff2") format("woff2");
+    font-weight: 700;
+    font-style: normal;
+}
+
+.summary-box, .info-box {
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 16px;
+    background-color: #ffffff;
+    margin-top: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.summary-box:hover, .info-box:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.info-box h3, .summary-box h3 {
+    background-color: #3b82f6;
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    font-size: 1.125rem;
+    font-weight: 600;
+}
+
+.grid-2-col {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+}
+
+@media (min-width: 640px) {
+    .grid-2-col {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.summary-item {
+    border: 1px solid #e5e7eb;
+    background-color: #f8fafc;
+    padding: 10px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.summary-item:hover {
+    background-color: #f1f5f9;
+}
+
+.grand-total {
+    background-color: #e2e8f0;
+    padding: 16px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1.125rem;
+}
+
+#invoicePreview {
+    position: relative;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+#invoicePreview:hover {
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+.logo-container {
+    max-width: 100%;
+    height: auto;
+}
+
+.tab-button {
+    padding: 8px 16px;
+    margin-left: 6px;
+    border-radius: 10px 10px 0 0;
+    background-color: #e5e7eb;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.tab-button:hover {
+    background-color: #d1d5db;
+}
+
+.tab-button.active {
+    background-color: #3b82f6;
+    color: white;
+    font-weight: 600;
+}
+
+.tab-content {
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.dropdown {
+    position: relative;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    max-height: 250px;
+    overflow-y: auto;
+    width: 100%;
+    z-index: 10;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-content div {
+    padding: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.dropdown-content div:hover {
+    background-color: #f3f4f6;
+}
+
+.dropdown-content.show {
+    display: block;
+}
+
+#itemImagePreview img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+@media (min-width: 640px) {
+    #itemImagePreview img {
+        width: 150px;
+        height: 150px;
+    }
+}
+
+#itemImagePreview img:hover {
+    transform: scale(1.03);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.15);
+}
+
+input, select, textarea {
+    transition: all 0.3s ease;
+    border: 1px solid #d1d5db;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+button {
+    transition: all 0.3s ease;
+    transform: translateY(0);
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* استایل‌های مخصوص سربرگ فاکتور */
+.invoice-header {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.invoice-header .logo-container {
+    max-width: 120px;
+    height: auto;
+}
+
+@media (min-width: 640px) {
+    .invoice-header .logo-container {
+        max-width: 150px;
+    }
+}
+
+.invoice-header .center-section {
+    text-align: center;
+}
+
+.invoice-header .center-section h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.invoice-header .center-section p {
+    font-size: 1.25rem;
+    color: #4b5563;
+}
+
+.invoice-header .left-section {
+    text-align: left;
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+@media (min-width: 640px) {
+    .invoice-header .left-section {
+        font-size: 1rem;
+    }
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid #e5e7eb;
+    padding: 8px;
+    text-align: right;
+}
+
+th {
+    background-color: #f3f4f6;
+    font-weight: 600;
+}
+
+tr.table-row:hover {
+    background-color: #f9fafb;
+}
+
+/* بهبود ظاهر آیکون‌های Font Awesome */
+.fas, .far {
+    margin-left: 8px;
+    vertical-align: middle;
+}
+
+/* استایل‌های واکنش‌گرا برای نمایش بهتر در موبایل */
+@media (max-width: 640px) {
+    .invoice-header {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .invoice-header .logo-container {
+        margin: 0 auto 16px;
+    }
+
+    .invoice-header .center-section {
+        margin-bottom: 16px;
+    }
+
+    .invoice-header .left-section {
+        text-align: center;
+    }
+
+    .summary-box, .info-box {
+        padding: 12px;
+    }
+
+    .summary-item {
+        padding: 8px;
+    }
+
+    .grand-total {
+        padding: 12px;
+        font-size: 1rem;
+    }
+}
+
+
+

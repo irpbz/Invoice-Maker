@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سیستم صدور فاکتور پیشرفته</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/persian-date@1.1.0/dist/persian-date.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body class="min-h-screen flex items-center justify-center p-4 bg-gray-100">
+    <!-- صفحه ورود -->
+    <div id="loginPage" class="login-container p-8 w-full max-w-md">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">سیستم صدور فاکتور</h1>
+            <p class="text-gray-600">لطفا برای ورود به سیستم اطلاعات خود را وارد کنید</p>
+        </div>
+        <div class="mb-6">
+            <label class="block text-gray-700 mb-2 font-medium">نام کاربری</label>
+            <input id="username" type="text" placeholder="نام کاربری" class="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+        </div>
+        <div class="mb-6">
+            <label class="block text-gray-700 mb-2 font-medium">رمز عبور</label>
+            <input id="password" type="password" placeholder="رمز عبور" class="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+        </div>
+        <button onclick="login()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 transform hover:-translate-y-1 shadow-md">
+            ورود به سیستم
+        </button>
+        <p id="loginError" class="text-red-500 text-center mt-4 hidden">نام کاربری یا رمز عبور اشتباه است.</p>
+    </div>
+
+    <!-- صفحه اصلی فاکتور -->
+    <div id="mainPage" class="main-container p-4 sm:p-8 w-full max-w-7xl hidden">
+        <div class="flex flex-col sm:flex-row justify-between items-center mb-8">
+            <div>
+                <h1 class="text-2xl sm:text-3xl font-bold text-gray-800">سیستم صدور فاکتور</h1>
+                <p class="text-gray-600 mt-1">مدیریت فروش، خریداران و انبار</p>
+            </div>
+            <button onclick="logout()" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-lg transition duration-300 transform hover:-translate-y-1 shadow-md mt-4 sm:mt-0">
+                خروج از سیستم
+            </button>
+        </div>
+
+        <!-- تب‌ها -->
+        <div class="flex flex-wrap border-b mb-6">
+            <button class="tab-button active" onclick="openTab('sellerTab')">
+                <i class="fas fa-store-alt mr-2"></i> مدیریت فروشنده
+            </button>
+            <button class="tab-button" onclick="openTab('customerTab')">
+                <i class="fas fa-users mr-2"></i> مدیریت خریدار
+            </button>
+            <button class="tab-button" onclick="openTab('inventoryTab')">
+                <i class="fas fa-boxes mr-2"></i> مدیریت انبار
+            </button>
+            <button class="tab-button" onclick="openTab('invoiceTab')">
+                <i class="fas fa-file-invoice-dollar mr-2"></i> صدور فاکتور
+            </button>
+        </div>
+
+        <!-- محتوای تب‌ها -->
+        <div id="sellerTab" class="tab-content active">
+            <h2 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+                <i class="fas fa-store-alt ml-2 text-blue-600"></i> مدیریت فروشنده
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-gray-700 mb-2 font-medium">نام فروشنده</label>
+                    <input id="sellerNameInput" type="text" placeholder="نام فروشنده" class="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2 font-medium">شماره تماس فروشنده</label>
+                    <input id="sellerPhoneInput" type="text" placeholder="شماره تماس فروشنده" class="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2 font-medium">کد ملی فروشنده</label>
+                    <input id="sellerNationalIdInput" type="text" placeholder="کد ملی فروشنده" class="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2 font-medium">کد اقتصادی فروشنده</label>
+                    <input id="sellerEconomicCodeInput" type="text" placeholder="کد اقتصادی فروشنده" class="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2 font-medium">کد پستی فروشنده</label>
+                    <input id="sellerPostalCodeInput" type="text" placeholder="کد پستی فروشنده" class="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2 font-medium">شماره حساب فروشنده</label>
+                    <input id="sellerAccountNumberInput" type="text" placeholder="شماره حساب فروشنده" class="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                </div>
+                <div class="sm:col-span-2">
+                    <label class="block text-gray-700 mb-2 font-medium">آدرس فروشنده</label>
+                    <input id="sellerAddressInput" type="text" placeholder="آدرس فروشنده" class="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2 font-medium">بارگذاری لوگو شرکت</label>
+                    <input id="sellerLogoInput" type="file" accept="image/*" class="w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2 font-medium">بارگذاری امضا فروشنده</label>
+                    <input id="sellerSignatureInput" type="file" accept="image/*" class="w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                </div>
+                <div class="sm:col-span-2 flex flex-col sm:flex-row justify-between gap-4">
+                    <button onclick="addSeller()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 transform hover:-translate-y-1 shadow-md">
+                        افزودن/ویرایش فروشنده
+                    </button>
+                    <select id="sellerSelect" class="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                        <option value="">انتخاب فروشنده</option>
+                    </select>
+                </div>
+            </div>
+            <div id="sellerList" class="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+        </div>
+
+        <div id="customerTab" class="tab-content">
+            <h2 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+                <i class="fas fa-users ml-2 text-blue-600"></i> مدیریت خریدار
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-gray-700 mb-2 font-medium">نام مشتری</label>
+                    <input id="customerNameInput" type="text" placeholder="نام مشتری" class="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2 font-medium">شماره تماس</label>
+                    <input id="customerPhoneInput" type="text" placeholder="شماره تماس" class="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2 font-medium">کد ملی مشتری</label>
+                    <input id="customerNationalIdInput" type="text" placeholder="کد ملی مشتری" class="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2 font-medium">کد اقتصادی مشتری</label>
+                    <input id="customerEconomicCodeInput" type="text" placeholder="کد اقتصادی مشتری" class="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2 font-medium">کد پستی مشتری</label>
+                    <input id="customerPostalCodeInput" type="text" placeholder="کد پستی مشتری" class="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2 font-medium">شماره حساب مشتری</label>
+                    <input id="customerAccountNumberInput" type="text" placeholder="شماره حساب مشتری" class="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                </div>
+                <div class="sm:col-span-2">
+                    <label class="block text-gray-700 mb-2 font-medium">آدرس مشتری</label>
+                    <input id="customerAddressInput" type="text" placeholder="آدرس مشتری" class="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                </div>
+                <div class="sm:col-span-2 flex flex-col sm:flex-row justify-between gap-4">
+                    <button onclick="addCustomer()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 transform hover:-translate-y-1 shadow-md">
+                        افزودن/ویرایش خریدار
+                    </button>
+                    <select id="customerSelect" class="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                        <option value="">انتخاب خریدار</option>
+                    </select>
+                </div>
+            </div>
+            <div id="customerList" class="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+        </div>
+
+        <div id="inventoryTab" class="tab-content">
+            <h2 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+                <i class="fas fa-boxes ml-2 text-blue-600"></i> مدیریت انبار
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-gray-700 mb-2 font-medium">کد محصول</label>
+                    <input id="productCodeInput" type="text" placeholder="کد محصول" class="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2 font-medium">نام محصول</label>
+                    <input id="productNameInput" type="text" placeholder="نام محصول" class="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2 font-medium">موجودی</label>
+                    <div class="flex items-center gap-4">
+                        <input id="productStockInput" type="number" placeholder="موجودی" min="0" class="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                        <label class="flex items-center">
+                            <input id="unlimitedStock" type="checkbox" class="mr-2 w-5 h-5">
+                            <span class="text-gray-700">نامحدود</span>
+                        </label>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2 font-medium">قیمت واحد</label>
+                    <input id="productPriceInput" type="number" placeholder="قیمت واحد" min="0" class="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-2 font-medium">بارگذاری تصویر محصول</label>
+                    <input id="productImageInput" type="file" accept="image/*" class="w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                </div>
+                <div class="sm:col-span-2">
+                    <button onclick="addProduct()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 transform hover:-translate-y-1 shadow-md">
+                        افزودن/ویرایش محصول
+                    </button>
+                </div>
+            </div>
+            <div id="productList" class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </div>
+
+        <div id="invoiceTab" class="tab-content">
+            <!-- فرم اطلاعات فاکتور -->
+            <div class="mb-8">
+                <h2 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+                    <i class="fas fa-file-invoice-dollar ml-2 text-blue-600"></i> اطلاعات فاکتور
+                </h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-gray-700 mb-2 font-medium">تاریخ شمسی</label>
+                        <input id="invoiceDate" type="text" placeholder="مثال: ۱۴۰۴/۰۵/۱۶" class="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2 font-medium">شماره فاکتور</label>
+                        <input id="invoiceNumber" type="text" placeholder="شماره فاکتور" class="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2 font-medium">نوع فاکتور</label>
+                        <select id="invoiceType" class="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                            <option value="صورتحساب فروش">صورتحساب فروش</option>
+                            <option value="صورتحساب خرید">صورتحساب خرید</option>
+                            <option value="پیش‌فاکتور">پیش‌فاکتور</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2 font-medium">عنوان فاکتور (در صورت عدم انتخاب فروشنده)</label>
+                        <input id="invoiceTitle" type="text" placeholder="عنوان فاکتور" class="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2 font-medium">انتخاب فروشنده</label>
+                        <select id="sellerSelectInvoice" class="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                            <option value="">انتخاب فروشنده</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2 font-medium">جستجوی خریدار</label>
+                        <div class="dropdown">
+                            <input id="customerSearch" type="text" placeholder="جستجوی خریدار (نام یا کد ملی)" class="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                            <div id="customerSearchDropdown" class="dropdown-content"></div>
+                            <input id="customerIndex" type="hidden">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2 font-medium">مانده از قبل</label>
+                        <input id="previousDebt" type="number" placeholder="مانده از قبل" min="0" class="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition" oninput="updateTable()">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2 font-medium">واحد پول</label>
+                        <select id="currency" class="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition" onchange="updateTable()">
+                            <option value="rial">ریال</option>
+                            <option value="toman">تومان</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- فرم آیتم‌های فاکتور -->
+            <div class="mb-8">
+                <h2 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+                    <i class="fas fa-shopping-cart ml-2 text-blue-600"></i> آیتم‌های فاکتور
+                </h2>
+                <div class="grid grid-cols-1 sm:grid-cols-5 gap-4 mb-6">
+                    <div class="sm:col-span-1">
+                        <label class="block text-gray-700 mb-2 font-medium">جستجوی محصول</label>
+                        <div class="dropdown">
+                            <input id="itemSearch" type="text" placeholder="جستجوی محصول (کد یا نام)" class="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                            <div id="itemSearchDropdown" class="dropdown-content"></div>
+                            <input id="itemCode" type="hidden">
+                        </div>
+                    </div>
+                    <div class="sm:col-span-1">
+                        <label class="block text-gray-700 mb-2 font-medium">شرح</label>
+                        <input id="itemName" type="text" placeholder="شرح" class="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                    </div>
+                    <div class="sm:col-span-1">
+                        <label class="block text-gray-700 mb-2 font-medium">تعداد</label>
+                        <input id="itemQty" type="number" placeholder="تعداد" min="1" class="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                    </div>
+                    <div class="sm:col-span-1">
+                        <label class="block text-gray-700 mb-2 font-medium">قیمت واحد</label>
+                        <input id="itemPrice" type="number" placeholder="قیمت واحد" min="0" class="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                    </div>
+                    <div class="sm:col-span-1 flex items-end">
+                        <button onclick="addItem()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 transform hover:-translate-y-1 shadow-md">
+                            افزودن آیتم
+                        </button>
+                    </div>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-6">
+                    <div id="itemImagePreview" class="hidden sm:w-1/4"></div>
+                    <div class="w-full overflow-x-auto">
+                        <table class="w-full text-right border-collapse text-sm sm:text-base">
+                            <thead>
+                                <tr class="bg-gray-200">
+                                    <th class="p-2 sm:p-3 border">ردیف</th>
+                                    <th class="p-2 sm:p-3 border">تصویر</th>
+                                    <th class="p-2 sm:p-3 border">کد محصول</th>
+                                    <th class="p-2 sm:p-3 border">شرح</th>
+                                    <th class="p-2 sm:p-3 border">تعداد</th>
+                                    <th class="p-2 sm:p-3 border">قیمت واحد</th>
+                                    <th class="p-2 sm:p-3 border">مجموع</th>
+                                    <th class="p-2 sm:p-3 border">ویرایش</th>
+                                    <th class="p-2 sm:p-3 border">حذف</th>
+                                </tr>
+                            </thead>
+                            <tbody id="itemTable" class="bg-white"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- فرم مالیات، تخفیف و مقادیر دلخواه -->
+            <div class="mb-8">
+                <h2 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+                    <i class="fas fa-calculator ml-2 text-blue-600"></i> جزئیات مالی
+                </h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-gray-700 mb-2 font-medium">نرخ مالیات (%)</label>
+                        <input id="taxRate" type="number" placeholder="نرخ مالیات (%)" min="0" max="100" class="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition" oninput="updateTable()">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2 font-medium">تخفیف</label>
+                        <div class="flex gap-4">
+                            <input id="discount" type="number" placeholder="تخفیف" min="0" class="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition" oninput="updateTable()">
+                            <select id="discountType" class="w-1/3 px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition" onchange="updateTable()">
+                                <option value="numeric">عددی</option>
+                                <option value="percentage">درصدی</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2 font-medium">نام مقدار دلخواه</label>
+                        <input id="customName" type="text" placeholder="مثال: باربری" class="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition" oninput="updateTable()">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2 font-medium">مقدار دلخواه</label>
+                        <input id="customAmount" type="number" placeholder="مقدار دلخواه" min="0" class="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition" oninput="updateTable()">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2 font-medium">نام پیش‌پرداخت</label>
+                        <input id="prepaymentName" type="text" placeholder="مثال: پیش‌پرداخت" value="پیش‌پرداخت" class="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition" oninput="updateTable()">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2 font-medium">مقدار پیش‌پرداخت</label>
+                        <div class="flex gap-4">
+                            <input id="prepaymentAmount" type="number" placeholder="مقدار پیش‌پرداخت" min="0" class="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition" oninput="updateTable()">
+                            <select id="prepaymentType" class="w-1/3 px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition" onchange="updateTable()">
+                                <option value="subtract">تفریق</option>
+                                <option value="add">جمع</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- لوگو و امضا -->
+            <div class="mb-8">
+                <h2 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+                    <i class="fas fa-signature ml-2 text-blue-600"></i> لوگو و امضا
+                </h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-gray-700 mb-2 font-medium">بارگذاری لوگو فاکتور</label>
+                        <p class="text-sm text-gray-500 mb-2">(در صورت عدم انتخاب فروشنده)</p>
+                        <input id="invoiceLogoInput" type="file" accept="image/*" class="w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2 font-medium">بارگذاری امضا فاکتور</label>
+                        <p class="text-sm text-gray-500 mb-2">(در صورت عدم انتخاب فروشنده)</p>
+                        <input id="invoiceSignatureInput" type="file" accept="image/*" class="w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                    </div>
+                    <div class="sm:col-span-2">
+                        <label class="flex items-center">
+                            <input id="includeSignature" type="checkbox" checked class="mr-2 w-5 h-5">
+                            <span class="text-gray-700">درج امضا فروشنده در فاکتور</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- متن دلخواه -->
+            <div class="mb-8">
+                <h2 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+                    <i class="fas fa-align-left ml-2 text-blue-600"></i> متن دلخواه
+                </h2>
+                <textarea id="customText" placeholder="متن دلخواه (مثال: شرایط پرداخت)" class="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition" rows="4"></textarea>
+            </div>
+
+            <!-- نمایش جمع‌بندی -->
+            <div class="mb-8 summary-box">
+                <h2 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+                    <i class="fas fa-cash-register ml-2 text-blue-600"></i> جمع‌بندی
+                </h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="summary-item"><p><strong>مالیات:</strong> <span id="totalTax">۰</span></p></div>
+                    <div class="summary-item"><p><strong>تخفیف:</strong> <span id="discountAmount">۰</span></p></div>
+                    <div class="summary-item"><p><strong>مانده از قبل:</strong> <span id="debtAmount">۰</span></p></div>
+                    <div id="customAmountContainer" class="summary-item"><p><strong>هزینه اضافی:</strong> <span id="customAmountDisplay">۰</span></p></div>
+                    <div id="prepaymentAmountContainer" class="summary-item"><p><strong>پیش‌پرداخت:</strong> <span id="prepaymentAmountDisplay">۰</span></p></div>
+                    <div class="col-span-1 sm:col-span-2 grand-total"><p class="text-lg sm:text-xl"><strong>مجموع کل:</strong> <span id="grandTotal">۰</span> | <span id="grandTotalText" class="font-medium"></span></p></div>
+                </div>
+            </div>
+
+            <!-- دکمه‌های عملیات -->
+            <div class="flex flex-wrap justify-end gap-4">
+                <button onclick="generateInvoice()" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 transform hover:-translate-y-1 shadow-md">
+                    <i class="fas fa-file-invoice mr-2"></i> تولید فاکتور
+                </button>
+                <button onclick="generateImage()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 transform hover:-translate-y-1 shadow-md">
+                    <i class="fas fa-download mr-2"></i> دانلود تصویر
+                </button>
+                <button onclick="saveInvoice()" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 transform hover:-translate-y-1 shadow-md">
+                    <i class="fas fa-save mr-2"></i> ذخیره فاکتور
+                </button>
+                <button onclick="loadInvoices()" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 transform hover:-translate-y-1 shadow-md">
+                    <i class="fas fa-list mr-2"></i> نمایش فاکتورها
+                </button>
+                <button onclick="resetForm()" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 transform hover:-translate-y-1 shadow-md">
+                    <i class="fas fa-redo mr-2"></i> بازنشانی
+                </button>
+            </div>
+
+            <!-- پیش‌نمایش فاکتور -->
+            <div id="invoicePreview" class="hidden mt-8 p-4 sm:p-8 bg-white rounded-lg shadow-lg">
+                <div id="previewContent"></div>
+            </div>
+
+            <!-- فاکتورهای ذخیره‌شده -->
+            <div id="savedInvoices" class="hidden mt-8 p-4 sm:p-8 bg-white rounded-lg shadow-lg">
+                <h2 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+                    <i class="fas fa-archive ml-2 text-blue-600"></i> فاکتورهای ذخیره‌شده
+                </h2>
+                <div id="savedInvoicesList" class="grid grid-cols-1 sm:grid-cols-2 gap-6"></div>
+            </div>
+        </div>
+    </div>
+    <script src="./utils.js"></script>
+    <script src="./auth.js"></script>
+    <script src="./tabs.js"></script>
+    <script src="./data.js"></script>
+    <script src="./invoice.js"></script>
+</body>
+</html>
